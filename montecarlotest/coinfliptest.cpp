@@ -1,3 +1,6 @@
+/* 
+ * This file is just to test how mt19937 library in c++ <random> library works
+ * */
 #include <iostream>
 #include <random>
 #include <ctime>
