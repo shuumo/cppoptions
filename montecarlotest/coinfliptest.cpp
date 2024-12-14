@@ -15,9 +15,8 @@ int main(int argc, char **argv) {
     std::string flipString = "TAILS"; 
     int headsCount = 0;
      
-    std::vector<int> patternMatch(3, -1);
+    std::vector<char> patternMatch(3, '0');
     int patternCount = 0;
-    int charToValue;
 
     for(int i = 0; i < FLIP_COUNT; i++) {
         flipValue = mt();
@@ -27,14 +26,10 @@ int main(int argc, char **argv) {
         } 
         std::cout << "Coin " << i+1 << " flipped: " << flipString << std::endl;
         
-        charToValue = 0;
-        if(flipString.at(0) == 'H') {
-            charToValue++;
-        }
         patternMatch.erase(patternMatch.begin());
-        patternMatch.push_back(charToValue);
+        patternMatch.push_back(flipString.at(0));
 
-        if(patternMatch[0] == 1 && patternMatch[1] == 0 && patternMatch[2] == 1) {
+        if(patternMatch[0] == 'H' && patternMatch[1] == 'T' && patternMatch[2] == 'H') {
             patternCount++;
         }
 
