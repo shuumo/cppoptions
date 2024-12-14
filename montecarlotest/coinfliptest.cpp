@@ -4,16 +4,20 @@
 #include <iostream>
 #include <random>
 #include <ctime>
+#include <vector>
 
-#define FLIP_COUNT 10000
+#define FLIP_COUNT 100
 
 int main(int argc, char **argv) {
     std::mt19937 mt(time(nullptr)); 
     unsigned int flipValue;
     
-    std::string flipString = "TAILS";
-    
+    std::string flipString = "TAILS"; 
     int headsCount = 0;
+     
+    std::vector<int> patternMatch(3, -1);
+    int patternCount = 0;
+    int charToValue;
 
     for(int i = 0; i < FLIP_COUNT; i++) {
         flipValue = mt();
@@ -22,14 +26,27 @@ int main(int argc, char **argv) {
             headsCount++;
         } 
         std::cout << "Coin " << i+1 << " flipped: " << flipString << std::endl;
+        
+        charToValue = 0;
+        if(flipString.at(0) == 'H') {
+            charToValue++;
+        }
+        patternMatch.erase(patternMatch.begin());
+        patternMatch.push_back(charToValue);
+
+        if(patternMatch[0] == 1 && patternMatch[1] == 0 && patternMatch[2] == 1) {
+            patternCount++;
+        }
+
         flipString = "TAILS";
     }
-    
+
     std::cout << std::endl;
 
     std::cout << "Total flips: " << FLIP_COUNT << std::endl;
     std::cout << "Number of times the coin flipped Heads: " << headsCount << std::endl; 
     std::cout << "Number of times the coin flipped Tails: " << FLIP_COUNT-headsCount << std::endl;
 
+    std::cout << "Heads, Tails then Heads appeared in sequence " << patternCount << " times during the simulation." << std::endl;
     return 0;
 }
