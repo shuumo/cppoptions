@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
         if(flipValue >= mt.max()/2) {
             flipString = "HEADS";
             headsCount++;
-        } 
+        }
         std::cout << "Coin " << i+1 << " flipped: " << flipString << std::endl;
         
         patternMatch.erase(patternMatch.begin());
@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
     std::cout << std::endl;
 
     std::cout << "Total flips: " << FLIP_COUNT << std::endl;
-    std::cout << "Number of times the coin flipped Heads: " << headsCount << std::endl; 
+    std::cout << "Number of times the coin flipped Heads: " << headsCount << std::endl;
     std::cout << "Number of times the coin flipped Tails: " << FLIP_COUNT-headsCount << std::endl;
 
     std::cout << "Heads, Tails then Heads appeared in sequence " << patternCount << " times during the simulation." << std::endl;
