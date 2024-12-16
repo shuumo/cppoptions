@@ -5,7 +5,7 @@ This repository contains a series of mini-projects and tools I am building in C+
 Currently, dependencies include (using each of their respective latest versions at the time of commits):
 - C++ Compiler (g++/clang++)
 - Python
-- Standard Library (for basic operations and containers)
+- cpp Standard Library (for basic operations and containers)
 - xtensor (for numerical computing)
 
 
