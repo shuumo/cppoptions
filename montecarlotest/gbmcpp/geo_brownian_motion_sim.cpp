@@ -5,36 +5,63 @@
 #include "xtensor/xview.hpp"
 #include "xtensor/xbuilder.hpp"
 #include "xtensor/xrandom.hpp"
+#include "xtensor/xmath.hpp"
 #include <cmath>
 #include <ctime>
 #include <vector>
 
 namespace plt = matplotlibcpp;
 
-#define INTERVALS 20
-
-double gbm_next_value(double value, double randomValue) {
-    return value+randomValue;
-}
+// modifyable parameters
+#define MU 0.04           //(%)
+#define SIGMA 0.18        //(%)
+#define NUM_OF_YEARS 2    //(years)
 
 int main(int argc, char **argv) { 
-    std::vector<double> timePeriods;
-    std::vector<double> price;
+    xt::random::seed(time(nullptr));
 
-    xt::random::seed(std::time(nullptr));
-    auto Z = xt::random::randn({INTERVALS}, 0.0, 10.0);
-    double rando;
+    // drift (over years) 
+    double mu = MU;
+     
+    // volatility (over years)
+    double sigma = SIGMA;
 
-    double initialPrice = 200;
+    // change in time (years)
+    double dt = 1.0/365.0;
 
-    for(int t = 0; t < INTERVALS; t++) {
-        rando = Z(t);
-        timePeriods.push_back(t);
-        initialPrice = gbm_next_value(initialPrice, rando);
-        price.push_back(initialPrice);
+    // mean of log returns
+    double m = (mu - 0.5 * std::pow(sigma, 2));
+    
+    // volatility of log returns
+    double s = sigma;
+    
+    // daily log returns
+    auto logreturn = xt::random::randn({(1/dt)*NUM_OF_YEARS}, m*dt, s * std::sqrt(dt));
+
+    // daily raw returns 
+    auto returns = xt::exp(logreturn) - 1;
+
+    // daily prices assuming S0=1
+    auto price = xt::exp(xt::cumsum(logreturn));
+    
+    
+    std::cout << "mu: " << mu << std::endl;
+    std::cout << "sigma: " << sigma << std::endl;
+    std::cout << "dt: " << dt << std::endl;
+    std::cout << "m: " << m << std::endl;
+    std::cout << "s: " << s << std::endl; 
+    
+    std::vector<double> changeInPrice(price.begin(), price.end()); 
+    std::cout << "time change of simulation: " << changeInPrice.size() << std::endl; 
+
+    auto times = xt::linspace<double>(0., (double) changeInPrice.size(), changeInPrice.size());
+    std::vector<double> changeInTime(times.begin(), times.end());
+    
+    for(const auto& i : changeInPrice) {
+        std::cout << i << std::endl;
     }
 
-    plt::plot(timePeriods, price);
+    plt::plot(changeInTime, changeInPrice);
     plt::show();
 
     return 0;
